@@ -18,6 +18,7 @@ interface FunnyOrderInterface
     const FIELD_PHONE         = 'phone';
     const FIELD_WISH          = 'wish';
     const FIELD_STATUS        = 'status';
+    const AVALIBLE_STATUS     = 1;
 
     public function getId();
 
