@@ -12,26 +12,51 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Framework\Session\SessionManagerInterface;
 use Vaimo\Mytest\Model\ResourceModel\FunnyOrder\CollectionFactory;
 
+/**
+ * Class FunnyOrderDataProvider
+ * @package Vaimo\Mytest\DataProvider
+ */
 class FunnyOrderDataProvider extends AbstractDataProvider
 {
+    /**
+     * @var SessionManagerInterface
+     */
     private $sessionManager;
+
+    /**
+     * FunnyOrderDataProvider constructor.
+     *
+     * @param SessionManagerInterface $sessionManager
+     * @param CollectionFactory $collectionFactory
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param array $meta
+     * @param array $data
+     */
     public function __construct(SessionManagerInterface $sessionManager,
                                 CollectionFactory $collectionFactory,
-                                $name, $primaryFieldName,
+                                $name,
+                                $primaryFieldName,
                                 $requestFieldName,
-                                array $meta = [], array $data = [])
-    {
+                                array $meta = [], array $data = []
+    ) {
         $this->sessionManager = $sessionManager;
-        $this->collection     = $collectionFactory->create();
+        $this->collection = $collectionFactory->create();
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         $model = $this->sessionManager->getCurrentFunnyOrderModel();
         $this->sessionManager->setCurrentFunnyOrderModel(null);
-        if($model!=null) {
-            return [$model->getId()=> $model->getData()];
-        } else return [];
+        if ($model != null) {
+            return [$model->getId() => $model->getData()];
+        } else {
+            return [];
+        }
     }
 }

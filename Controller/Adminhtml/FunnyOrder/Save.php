@@ -10,8 +10,15 @@ namespace Vaimo\Mytest\Controller\Adminhtml\FunnyOrder;
 
 use Vaimo\Mytest\Model\FunnyOrderInterface;
 
+/**
+ * Class Save
+ * @package Vaimo\Mytest\Controller\Adminhtml\FunnyOrder
+ */
 class Save extends AbstractFunnyOrder
 {
+    /**
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     */
     public function execute()
     {
         $isPost = $this->getRequest()->isPost();
@@ -41,7 +48,7 @@ class Save extends AbstractFunnyOrder
 
                 return $this->redirectToGrid();
             } catch (\Exception $e) {
-                if($e->getMessage()) {
+                if ($e->getMessage()) {
                     $this->messageManager->addWarningMessage($e->getMessage());
                 } else {
                     $this->messageManager->addErrorMessage(__('Order doesn\'t save'));
@@ -53,6 +60,7 @@ class Save extends AbstractFunnyOrder
                 $this->_redirect('*/*/edit', ['id' => $model->getId()])
                 : $this->_redirect('*/*/edit');
         }
+
         return $this->doRefererRedirect();
     }
 }

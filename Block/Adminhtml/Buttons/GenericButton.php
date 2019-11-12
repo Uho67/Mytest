@@ -14,11 +14,21 @@ use Vaimo\Mytest\Api\FunnyOrderRepositoryInterface as Repository;
 
 class GenericButton
 {
-
+    /**
+     * @var Context
+     */
     protected $context;
-
+    /**
+     * @var Repository
+     */
     protected $repository;
 
+    /**
+     * GenericButton constructor.
+     *
+     * @param Context $context
+     * @param Repository $repository
+     */
     public function __construct(
         Context $context,
         Repository $repository
@@ -27,6 +37,9 @@ class GenericButton
         $this->repository = $repository;
     }
 
+    /**
+     * @return |null
+     */
     public function getOrderId()
     {
         try {
@@ -35,9 +48,16 @@ class GenericButton
             )->getId();
         } catch (NoSuchEntityException $e) {
         }
+
         return null;
     }
 
+    /**
+     * @param string $route
+     * @param array $params
+     *
+     * @return string
+     */
     public function getUrl($route = '', $params = [])
     {
         return $this->context->getUrlBuilder()->getUrl($route, $params);

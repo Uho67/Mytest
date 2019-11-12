@@ -2,9 +2,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Vaimo\Mytest\Model\FunnyOrderInterface"
-                type="Vaimo\Mytest\Model\FunnyOrder" />
+                type="Vaimo\Mytest\Model\FunnyOrder"/>
     <preference for="Vaimo\Mytest\Api\FunnyOrderRepositoryInterface"
-                type="Vaimo\Mytest\Model\FunnyOrderRepository" />
+                type="Vaimo\Mytest\Model\FunnyOrderRepository"/>
 
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
@@ -12,7 +12,8 @@
                 <item
                     name="funnyorder_grid_listing_data_source"
                     xsi:type="string"
-                >Vaimo\Mytest\Model\ResourceModel\FunnyOrder\Grid\Collection</item>
+                >Vaimo\Mytest\Model\ResourceModel\FunnyOrder\Grid\Collection
+                </item>
             </argument>
         </arguments>
     </type>

@@ -13,6 +13,11 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Vaimo\Mytest\Model\FunnyOrderFactory;
 use Vaimo\Mytest\Api\FunnyOrderRepositoryInterface;
+
+/**
+ * Class UpgradeData
+ * @package Vaimo\Mytest\Setup
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     private $modelFactory;
@@ -23,6 +28,13 @@ class UpgradeData implements UpgradeDataInterface
         $this->repository   = $repository;
     }
 
+    /**
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     *
+     * @throws \Exception
+     *
+     */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '1.2.6','<')) {

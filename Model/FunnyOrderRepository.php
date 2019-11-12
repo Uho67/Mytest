@@ -18,27 +18,59 @@ use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Vaimo\Mytest\Model\ResourceModel\FunnyOrder as ResourceModel;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * Class FunnyOrderRepository
+ * @package Vaimo\Mytest\Model
+ */
 class FunnyOrderRepository implements FunnyOrderRepositoryInterface
 {
+    /**
+     * @var SearchResultInterfaceFactory
+     */
     private $searchResultFactory;
+    /**
+     * @var FunnyOrderFactory
+     */
     private $funnyOrderFactory;
+    /**
+     * @var ResourceModel
+     */
     private $resourceModel;
+    /**
+     * @var CollectionFactory
+     */
     private $collectionFactory;
+    /**
+     * @var CollectionProcessorInterface
+     */
     private $collectionProcessor;
+    /**
+     * @var FilterBuilder
+     */
     private $filterBuilder;
+    /**
+     * @var FilterGroupBuilder
+     */
     private $filterGroupBuilder;
+    /**
+     * @var SearchCriteriaBuilderFactory
+     */
     private $searchCriteriaBuilderFactory;
 
-    public function __construct(SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
+    private $timeZona;
+    public function __construct(TimezoneInterface $timeZona,
+                                SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
                                 FilterBuilder $filterBuilder,
                                 FilterGroupBuilder $filterGroupBuilder,
                                 SearchResultInterfaceFactory $searchResultInterfaceFactory,
                                 CollectionProcessorInterface $collectionProcessor,
                                 CollectionFactory $collectionFactory,
                                 ResourceModel $resourceModel,
-                                FunnyOrderFactory $funnyOrderFactory)
-    {
+                                FunnyOrderFactory $funnyOrderFactory
+    ) {
+        $this->timeZona = $timeZona;
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
@@ -83,6 +115,12 @@ class FunnyOrderRepository implements FunnyOrderRepositoryInterface
         return $searchResult;
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed|void
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
     public function deleteById($id)
     {
         try {
@@ -116,7 +154,7 @@ class FunnyOrderRepository implements FunnyOrderRepositoryInterface
      */
     public function save(FunnyOrderInterface $model)
     {
-        if(!$this->validation($model)) {
+        if (!$this->validation($model)) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('Chosen time is busy'));
         }
         try {
@@ -124,12 +162,22 @@ class FunnyOrderRepository implements FunnyOrderRepositoryInterface
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__($exception->getMessage()));
         }
+
         return $model;
     }
 
+    /**
+     * @param FunnyOrderInterface $model
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
     private function validation(FunnyOrderInterface $model)
     {
-        if($model->getFunEnd()<=$model->getFunStart()) {
+
+        $model->setFunEnd($this->timeZona->date(new \DateTime($model->getFunEnd()))->format('Y/m/d H:i:s'));
+        $model->setFunStart($this->timeZona->date(new \DateTime($model->getFunStart()))->format('Y/m/d H:i:s'));
+        if ($model->getFunEnd() <= $model->getFunStart()) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('End time need to be more then start time'));
         }
         $searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();
@@ -139,22 +187,38 @@ class FunnyOrderRepository implements FunnyOrderRepositoryInterface
             ->setConditionType('neq')
             ->create();
         $filterGroupId = $this->filterGroupBuilder->addFilter($filterId)->create();
+        $filterAccepted = $this->filterBuilder
+            ->setField(FunnyOrderInterface::FIELD_STATUS)
+            ->setValue(FunnyOrderInterface::AVALIBLE_STATUS)
+            ->setConditionType('eq')
+            ->create();
+        $filterGroupAccepted = $this->filterGroupBuilder->addFilter($filterAccepted)->create();
         $filterMore = $this->filterBuilder
             ->setField(FunnyOrderInterface::FIELD_FUN_START)
             ->setValue($model->getFunEnd())
             ->setConditionType('gt')
             ->create();
-
         $filterLess = $this->filterBuilder
             ->setField(FunnyOrderInterface::FIELD_FUN_END)
             ->setValue($model->getFunStart())
             ->setConditionType('lt')
             ->create();
-        $filterGroupMore = $this->filterGroupBuilder->setFilters([$filterMore, $filterLess])->create();
-        $searchCriteria = $searchCriteriaBuilder->setFilterGroups([$filterGroupId,$filterGroupMore])->create();
+        $filterGroup = $this->filterGroupBuilder->setFilters([
+            $filterMore,
+            $filterLess
+        ])->create();
+        $searchCriteria = $searchCriteriaBuilder->setFilterGroups([
+            $filterGroupId,
+            $filterGroup,
+            $filterGroupAccepted
+        ])->create();
         $result = $this->getList($searchCriteria)->getTotalCount();
-        $generalResult = $model->getId()?$this->getList($searchCriteriaBuilder->create())->getTotalCount()-1:
-            $this->getList($searchCriteriaBuilder->create())->getTotalCount();
+        $searchCriteriaGeneral = $searchCriteriaBuilder->setFilterGroups([
+            $filterGroupAccepted,
+            $filterGroupId
+        ])->create();
+        $generalResult = $this->getList($searchCriteriaGeneral)->getTotalCount();
+
         return $result == $generalResult;
     }
 }

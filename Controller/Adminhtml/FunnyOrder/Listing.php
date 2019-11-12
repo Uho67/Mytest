@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Vaimo\Mytest\Controller\Adminhtml\FunnyOrder;
 
 /**
@@ -9,6 +8,6 @@ namespace Vaimo\Mytest\Controller\Adminhtml\FunnyOrder;
  */
 class Listing extends AbstractFunnyOrder
 {
-    const TITLE                 = 'Funny Order Grid';
-    const BREADCRUMB_TITLE      = 'Funny Order Grid';
+    const TITLE = 'Funny Order Grid';
+    const BREADCRUMB_TITLE = 'Funny Order Grid';
 }

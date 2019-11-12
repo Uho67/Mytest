@@ -11,8 +11,15 @@ namespace Vaimo\Mytest\Block\Adminhtml\Buttons\Funnyorder;
 use Vaimo\Mytest\Block\Adminhtml\Buttons\GenericButton;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
+/**
+ * Class SaveButton
+ * @package Vaimo\Mytest\Block\Adminhtml\Buttons\Funnyorder
+ */
 class SaveButton extends GenericButton implements ButtonProviderInterface
 {
+    /**
+     * @return array
+     */
     public function getButtonData()
     {
         return [
