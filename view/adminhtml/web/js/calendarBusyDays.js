@@ -1,4 +1,4 @@
-define(['jquery',"mage/calendar"], function ($) {
+define(['jquery','uiRegistry',"mage/calendar"], function ($,registry) {
     return function (config) {
         var disableddates = config.dates.split(',');
         function DisableSpecificDates(date) {

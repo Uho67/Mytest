@@ -13,6 +13,7 @@ use Magento\Framework\App\Action\Context;
 use Vaimo\Mytest\Model\FunnyOrderRepository;
 use Vaimo\Mytest\Model\FunnyOrderFactory;
 use Vaimo\Mytest\Model\FunnyOrderInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class Index extends Action
 {
@@ -33,16 +34,19 @@ class Index extends Action
         $formData = $this->getRequest()->getParams();
         if(!$this->validation($formData)){
             $this->messageManager->addErrorMessage(__('Check out please data in fields'));
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Check out please data in fields'));
+            return $this->redirectToLastPage();
         } else {
             try{
                 $this->repository->save($this->orderFactory->create()->setData($formData));
                 $this->messageManager->addSuccessMessage(__('Order has been saved.'));
+
             } catch (\Exception $e){
                 if ($e->getMessage()) {
                     $this->messageManager->addWarningMessage($e->getMessage());
+                    return $this->redirectToLastPage();
                 } else {
                     $this->messageManager->addErrorMessage(__('Order doesn\'t save please try again'));
+                    return $this->redirectToLastPage();
                 }
             }
         }
@@ -56,5 +60,11 @@ class Index extends Action
          } else {
              return true;
          }
+     }
+     private function redirectToLastPage()
+     {
+         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+         $resultRedirect->setUrl($this->_redirect->getRefererUrl());
+         return $resultRedirect;
      }
 }

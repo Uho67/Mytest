@@ -77,7 +77,7 @@
                 </validation>
             </settings>
         </field>
-        <field name="phone" formElement="input">
+        <field name="phone" formElement="input" component="Vaimo_Mytest/js/form/element/inputComponent">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">funnyorder</item>

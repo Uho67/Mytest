@@ -10,6 +10,9 @@
         <css src="Vaimo_Mytest::css/mytest.css" />
     </head>
     <body>
+        <!--<container name = "vaimo.mytest.popup" htmlTag="div" htmlId="eventPopup" >-->
+                <!--<uiComponent name="funnyorder_form"/>-->
+        <!--</container>-->
 
         <referenceContainer name="content">
             <container name = "my.test.conteiner.one" htmlTag="div" htmlClass = "myTestConteinerOne">

@@ -20,6 +20,9 @@
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
+        <settings>
+            <submitUrl path="*/savefunnyorder/index"/>
+        </settings>
         <dataProvider class="Vaimo\Mytest\DataProvider\Frontend\CustomerDataProvider" name="funnyorder_form_data_source">
         </dataProvider>
     </dataSource>
