@@ -14,21 +14,46 @@ use Vaimo\Mytest\Model\FunnyOrderRepository;
 use Vaimo\Mytest\Model\FunnyOrderFactory;
 use Vaimo\Mytest\Model\FunnyOrderInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Customer\Model\SessionFactory;
 
 class Index extends Action
 {
+    /**
+     * @var FunnyOrderRepository
+     */
     private $repository;
+    /**
+     * @var FunnyOrderFactory
+     */
     private $orderFactory;
+    /**
+     * @var SessionFactory
+     */
+    private $sessionFactory;
 
-    public function __construct(FunnyOrderFactory $funnyOrderFactory,
-                                FunnyOrderRepository $funnyOrderRepository,
-                                Context $context)
-    {
+    /**
+     * Index constructor.
+     *
+     * @param SessionFactory $sessionFactory
+     * @param FunnyOrderFactory $funnyOrderFactory
+     * @param FunnyOrderRepository $funnyOrderRepository
+     * @param Context $context
+     */
+    public function __construct(
+        SessionFactory $sessionFactory,
+        FunnyOrderFactory $funnyOrderFactory,
+        FunnyOrderRepository $funnyOrderRepository,
+        Context $context
+    ) {
+        $this->sessionFactory = $sessionFactory;
         $this->repository = $funnyOrderRepository;
         $this->orderFactory = $funnyOrderFactory;
         parent::__construct($context);
     }
 
+    /**
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     */
     public function execute()
     {
         $formData = $this->getRequest()->getParams();
@@ -37,8 +62,13 @@ class Index extends Action
             return $this->redirectToLastPage();
         } else {
             try{
+                $session = $this->sessionFactory->create();
+                if($session->getCustomerId()) {
+                    $formData[FunnyOrderInterface::FIELD_CUSTOMER_ID] = $session->getCustomerId();
+                }
                 $this->repository->save($this->orderFactory->create()->setData($formData));
                 $this->messageManager->addSuccessMessage(__('Order has been saved.'));
+                return $this->redirectToLastPage();
 
             } catch (\Exception $e){
                 if ($e->getMessage()) {
@@ -51,6 +81,12 @@ class Index extends Action
             }
         }
     }
+
+    /**
+     * @param $formData
+     *
+     * @return bool
+     */
      private function validation($formData)
      {
          if(!$formData[FunnyOrderInterface::FIELD_FUN_START] ||
@@ -61,6 +97,10 @@ class Index extends Action
              return true;
          }
      }
+
+    /**
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
      private function redirectToLastPage()
      {
          $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

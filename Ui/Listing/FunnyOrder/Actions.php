@@ -24,6 +24,7 @@ class Actions extends Column
      */
     const URL_EDIT = 'vaimo_mytest/funnyorder/edit';
     const URL_DELETE = 'vaimo_mytest/funnyorder/delete';
+    const URL_MESSAGE  = 'vaimo_mytest/funnyorder/messageform';
     /**
      *
      */
@@ -69,6 +70,10 @@ class Actions extends Column
                     $item[$name]['delete'] = [
                         'href' => $this->urlBuilder->getUrl($this::URL_DELETE, ['id' => $item[$this::IDENTIFIRE]]),
                         'label' => __('Delete')
+                    ];
+                    $item[$name]['message'] = [
+                        'href' => $this->urlBuilder->getUrl($this::URL_MESSAGE, ['id' => $item[$this::IDENTIFIRE]]),
+                        'label' => __('Message')
                     ];
                 }
             }

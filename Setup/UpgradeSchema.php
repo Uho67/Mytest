@@ -28,23 +28,29 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '1.2.5','<')) {
+        if (version_compare($context->getVersion(), '1.2.5', '<')) {
 
             $setup->startSetup();
             $tableElevator = $setup->getConnection()->newTable(
-                $setup->getTable( FunnyOrderInterface::TABLE_NAME)
+                $setup->getTable(FunnyOrderInterface::TABLE_NAME)
             )->addColumn(
                 FunnyOrderInterface::FIELD_ID,
                 Table::TYPE_INTEGER,
                 null,
-                ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned'=> true],
+                [
+                    'identity' => true,
+                    'nullable' => false,
+                    'primary' => true,
+                    'unsigned' => true
+                ],
                 'Fun order ID'
             )->addColumn(
                 FunnyOrderInterface::FIELD_CREATE_ORDER,
                 Table::TYPE_TIMESTAMP,
                 null,
                 [
-                    'default' => Table::TIMESTAMP_INIT,'nullable' => false
+                    'default' => Table::TIMESTAMP_INIT,
+                    'nullable' => false
                 ],
                 'create order'
             )->addColumn(
@@ -68,7 +74,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             )->addColumn(
                 FunnyOrderInterface::FIELD_STATUS,
                 Table::TYPE_BOOLEAN,
-                255, ['default' => 1 ,'nullable' => false],
+                255, [
+                'default' => 1,
+                'nullable' => false
+            ],
                 'status'
             )->addColumn(
                 FunnyOrderInterface::FIELD_PHONE,
@@ -80,6 +89,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'Fun order table '
             );
             $setup->getConnection()->createTable($tableElevator);
+            $setup->endSetup();
+        }
+        if (version_compare($context->getVersion(), '1.2.7', '<')) {
+
+            $setup->startSetup();
+            $table = $setup->getTable(FunnyOrderInterface::TABLE_NAME);
+            $columns = [
+                FunnyOrderInterface::FIELD_CUSTOMER_ID => [
+                    'type' => Table::TYPE_INTEGER,
+                    'nullable' => false,
+                    'comment' => 'customer Id',
+                ]
+            ];
+            $connection = $setup->getConnection();
+            foreach ($columns as $name => $definition) {
+                $connection->addColumn($table, $name, $definition);
+            }
             $setup->endSetup();
         }
     }

@@ -17,6 +17,8 @@ use Magento\Framework\Model\AbstractModel;
  */
 class FunnyOrder extends AbstractModel implements FunnyOrderInterface
 {
+    protected $_eventPrefix = 'funny_order_model';
+
     /**
      *
      */
@@ -127,5 +129,17 @@ class FunnyOrder extends AbstractModel implements FunnyOrderInterface
     public function setWish($text)
     {
         $this->setData(FunnyOrderInterface::FIELD_WISH, $text);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomerId()
+    {
+        return $this->getData(FunnyOrderInterface::FIELD_CUSTOMER_ID);
+    }
+    public function setCustomerId($id)
+    {
+        $this->setData(FunnyOrderInterface::FIELD_CUSTOMER_ID, $id);
     }
 }

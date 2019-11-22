@@ -2,28 +2,32 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">funnyorder_form.funnyorder_form_data_source</item>
+            <item name="provider" xsi:type="string">funnyorderfront_form.funnyorderfront_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Funny fields</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
     </argument>
     <settings>
-        <namespace>funnyorder_form</namespace>
+        <namespace>funnyorderfront_form</namespace>
         <dataScope>data</dataScope>
         <deps>
-            <dep>funnyorder_form.funnyorder_form_data_source</dep>
+            <dep>funnyorderfront_form.funnyorderfront_form_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="funnyorder_form_data_source">
+    <dataSource name="funnyorderfront_form_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
         <settings>
-            <submitUrl path="*/savefunnyorder/index"/>
+            <submitUrl path="vaimo_mytest/savefunnyorder/index"/>
         </settings>
-        <dataProvider class="Vaimo\Mytest\DataProvider\Frontend\CustomerDataProvider" name="funnyorder_form_data_source">
+        <dataProvider class="Vaimo\Mytest\DataProvider\Frontend\CustomerDataProvider" name="funnyorderfront_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>funny_id</primaryFieldName>
+            </settings>
         </dataProvider>
     </dataSource>
     <fieldset name="general">
@@ -108,7 +112,7 @@
                 <dataScope>wish</dataScope>
             </settings>
         </field>
-        <field name="mybutton" >
+        <field name="mybutton">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Vaimo_Mytest/js/button</item>

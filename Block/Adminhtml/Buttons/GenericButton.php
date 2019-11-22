@@ -12,6 +12,10 @@ use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Vaimo\Mytest\Api\FunnyOrderRepositoryInterface as Repository;
 
+/**
+ * Class GenericButton
+ * @package Vaimo\Mytest\Block\Adminhtml\Buttons
+ */
 class GenericButton
 {
     /**

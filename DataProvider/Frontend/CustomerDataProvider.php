@@ -13,11 +13,33 @@ use Vaimo\Mytest\Model\ResourceModel\FunnyOrder\CollectionFactory;
 use Vaimo\Mytest\Model\FunnyOrderFactory;
 use Magento\Customer\Model\SessionFactory;
 
+/**
+ * Class CustomerDataProvider
+ * @package Vaimo\Mytest\DataProvider\Frontend
+ */
 class CustomerDataProvider extends AbstractDataProvider
 {
+    /**
+     * @var FunnyOrderFactory
+     */
     private $funnyOrderFactory;
+    /**
+     * @var SessionFactory
+     */
     private $sessionFactory;
 
+    /**
+     * CustomerDataProvider constructor.
+     *
+     * @param SessionFactory $sessionFactory
+     * @param FunnyOrderFactory $funnyOrderFactory
+     * @param CollectionFactory $collectionFactory
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param array $meta
+     * @param array $data
+     */
    public function __construct(SessionFactory $sessionFactory,
                                FunnyOrderFactory $funnyOrderFactory,
                                CollectionFactory $collectionFactory ,
@@ -32,6 +54,10 @@ class CustomerDataProvider extends AbstractDataProvider
        $this->collection = $collectionFactory->create();
        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
    }
+
+    /**
+     * @return array
+     */
    public function getData()
    {
        if ($this->sessionFactory->create()->getCustomer()->getDefaultShippingAddress()) {

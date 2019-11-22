@@ -22,10 +22,11 @@ class UpgradeData implements UpgradeDataInterface
 {
     private $modelFactory;
     private $repository;
+
     public function __construct(FunnyOrderFactory $orderFactory, FunnyOrderRepositoryInterface $repository)
     {
         $this->modelFactory = $orderFactory;
-        $this->repository   = $repository;
+        $this->repository = $repository;
     }
 
     /**
@@ -37,17 +38,18 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '1.2.6','<')) {
+        if (version_compare($context->getVersion(), '1.2.6', '<')) {
+
             $dataStart = new \DateTime();
-            for ($i = 1; $i<6; $i++) {
+            for ($i = 1; $i < 6; $i++) {
                 $dataStart = $dataStart->add(new \DateInterval('PT4H'));
-                $dataEnd   = $dataStart->add(new \DateInterval('PT3H'));
+                $dataEnd = $dataStart->add(new \DateInterval('PT3H'));
                 $model = $this->modelFactory->create();
                 $model->setFunStart($dataStart);
                 $model->setFunEnd($dataEnd);
-                $model->setPhone($i.$i.$i.$i.$i.$i.$i);
+                $model->setPhone($i . $i . $i . $i . $i . $i . $i);
                 $model->setWish('My wish is >>>>');
-                $model->setStatus($i%2);
+                $model->setStatus($i % 2);
                 $this->repository->save($model);
             }
         }

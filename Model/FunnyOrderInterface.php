@@ -50,6 +50,10 @@ interface FunnyOrderInterface
     /**
      *
      */
+    const FIELD_CUSTOMER_ID   = 'customer_id';
+    /**
+     *
+     */
     const AVALIBLE_STATUS     = 1;
 
     /**
@@ -128,4 +132,16 @@ interface FunnyOrderInterface
      * @return mixed
      */
     public function getStatus();
+
+    /**
+     * @return mixed
+     */
+    public function getCustomerId();
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function setCustomerId($id);
 }

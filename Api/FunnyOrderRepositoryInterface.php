@@ -8,6 +8,10 @@
 
 namespace Vaimo\Mytest\Api;
 
+/**
+ * Interface FunnyOrderRepositoryInterface
+ * @package Vaimo\Mytest\Api
+ */
 interface FunnyOrderRepositoryInterface
 {
     /**

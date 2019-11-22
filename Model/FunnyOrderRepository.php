@@ -19,6 +19,7 @@ use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Vaimo\Mytest\Model\ResourceModel\FunnyOrder as ResourceModel;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Event\ManagerInterface as EventManager;
 
 /**
  * Class FunnyOrderRepository
@@ -58,18 +59,42 @@ class FunnyOrderRepository implements FunnyOrderRepositoryInterface
      * @var SearchCriteriaBuilderFactory
      */
     private $searchCriteriaBuilderFactory;
-
+    /**
+     * @var TimezoneInterface
+     */
     private $timeZona;
-    public function __construct(TimezoneInterface $timeZona,
-                                SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
-                                FilterBuilder $filterBuilder,
-                                FilterGroupBuilder $filterGroupBuilder,
-                                SearchResultInterfaceFactory $searchResultInterfaceFactory,
-                                CollectionProcessorInterface $collectionProcessor,
-                                CollectionFactory $collectionFactory,
-                                ResourceModel $resourceModel,
-                                FunnyOrderFactory $funnyOrderFactory
+    /**
+     * @var EventManager
+     */
+    private $eventManager;
+
+    /**
+     * FunnyOrderRepository constructor.
+     *
+     * @param EventManager $eventManager
+     * @param TimezoneInterface $timeZona
+     * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
+     * @param FilterBuilder $filterBuilder
+     * @param FilterGroupBuilder $filterGroupBuilder
+     * @param SearchResultInterfaceFactory $searchResultInterfaceFactory
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionFactory $collectionFactory
+     * @param ResourceModel $resourceModel
+     * @param \Vaimo\Mytest\Model\FunnyOrderFactory $funnyOrderFactory
+     */
+    public function __construct(
+        EventManager $eventManager,
+        TimezoneInterface $timeZona,
+        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
+        FilterBuilder $filterBuilder,
+        FilterGroupBuilder $filterGroupBuilder,
+        SearchResultInterfaceFactory $searchResultInterfaceFactory,
+        CollectionProcessorInterface $collectionProcessor,
+        CollectionFactory $collectionFactory,
+        ResourceModel $resourceModel,
+        FunnyOrderFactory $funnyOrderFactory
     ) {
+        $this->eventManager = $eventManager;
         $this->timeZona = $timeZona;
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->filterBuilder = $filterBuilder;
@@ -158,7 +183,20 @@ class FunnyOrderRepository implements FunnyOrderRepositoryInterface
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('Chosen time is busy'));
         }
         try {
+
+            if($model->getId()) {
+                $oldModel = $this->getById($model->getId());
+                $diff = $oldModel->getStatus()-$model->getStatus();
+            } else {
+                $diff = 1;
+            }
             $this->resourceModel->save($model);
+            if($diff!==0) {
+                if(!$model->getStatus()) {
+                    $model->setStatus(1);
+                }
+                $this->eventManager->dispatch('vaimo_funny_order_model_status_was_changed', ['orderModel'=>$model]);
+            }
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__($exception->getMessage()));
         }
@@ -175,8 +213,8 @@ class FunnyOrderRepository implements FunnyOrderRepositoryInterface
     private function validation(FunnyOrderInterface $model)
     {
 
-        $model->setFunEnd($this->timeZona->date(new \DateTime($model->getFunEnd()))->format('Y/m/d H:i:s'));
-        $model->setFunStart($this->timeZona->date(new \DateTime($model->getFunStart()))->format('Y/m/d H:i:s'));
+        $model->setFunEnd($this->timeZona->date($model->getFunEnd())->format('Y/m/d H:i:s'));
+        $model->setFunStart($this->timeZona->date($model->getFunStart())->format('Y/m/d H:i:s'));
         if ($model->getFunEnd() <= $model->getFunStart()) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('End time need to be more then start time'));
         }

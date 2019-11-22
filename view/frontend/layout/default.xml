@@ -1,24 +1,20 @@
 <?xml version="1.0"?>
-    <!--
-    /**
-     * Copyright © Vaimo, Inc. All rights reserved.
-     * See COPYING.txt for license details.
-     */
-    -->
+<!--
+/**
+ * Copyright © Vaimo, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <css src="Vaimo_Mytest::css/mytest.css" />
-    </head>
     <body>
-        <!--<container name = "vaimo.mytest.popup" htmlTag="div" htmlId="eventPopup" before="-">-->
-            <!--<uiComponent name="funnyorder_form"/>-->
-        <!--</container>-->
-        <referenceContainer name = "header.panel">
+        <container name="vaimo.mytest.popup" htmlTag="div" htmlId="eventPopup" before="-">
+            <uiComponent name="funnyorderfront_form"/>
+        </container>
+        <referenceContainer name="header.panel">
             <referenceBlock name="header" remove="true"/>
         </referenceContainer>
         <referenceBlock name="header.links">
-        <block class="Vaimo\Mytest\Block\Links\Mylinks" name="vaimo.test.header.links" template="Vaimo_Mytest::links.phtml" before="-" />
-        <block class="Magento\Framework\View\Element\Template" name="popup.event.button" template="Vaimo_Mytest::uiform/button.phtml" before="-" />
+            <block class="Magento\Framework\View\Element\Template" name="popup.event.button" template="Vaimo_Mytest::uiform/button.phtml" before="-"/>
         </referenceBlock>
     </body>
 </page>

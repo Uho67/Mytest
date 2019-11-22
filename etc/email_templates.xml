@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="vaimo_mytest_change_status_funny_order" label="It is test Email from me" file="funny_order_status.html" type="html" module="Vaimo_Mytest" area="frontend"/>
+    <template id="funny_order_admin_message_template" label="Fanny order message" file="message_funny_order.html" type="html" module="Vaimo_Mytest" area="adminhtml"/>
+</config>
