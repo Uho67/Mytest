@@ -21,7 +21,7 @@
             </item>
         </argument>
         <settings>
-            <submitUrl path="vaimo_mytest/savefunnyorder/index"/>
+            <submitUrl path="rest/V1/fannyorder"/>
         </settings>
         <dataProvider class="Vaimo\Mytest\DataProvider\Frontend\CustomerDataProvider" name="funnyorderfront_form_data_source">
             <settings>
