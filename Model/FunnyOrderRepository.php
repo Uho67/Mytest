@@ -179,9 +179,6 @@ class FunnyOrderRepository implements FunnyOrderRepositoryInterface
      */
     public function save(FunnyOrderInterface $model)
     {
-        if (!$this->validation($model)) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Chosen time is busy'));
-        }
         try {
 
             if($model->getId()) {

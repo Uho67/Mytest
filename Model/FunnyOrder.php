@@ -9,7 +9,11 @@
 namespace Vaimo\Mytest\Model;
 
 use Vaimo\Mytest\Model\ResourceModel\FunnyOrder as ResourceModel;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\{AbstractModel, Context};
+use Magento\Framework\Registry;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class FunnyOrder
@@ -17,7 +21,36 @@ use Magento\Framework\Model\AbstractModel;
  */
 class FunnyOrder extends AbstractModel implements FunnyOrderInterface
 {
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'funny_order_model';
+    /**
+     * @var TimezoneInterface
+     */
+    private $timeZona;
+
+    /**
+     * FunnyOrder constructor.
+     *
+     * @param TimezoneInterface $timeZona
+     * @param Context $context
+     * @param Registry $registry
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        TimezoneInterface $timeZona,
+        Context $context,
+        Registry $registry,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        $this->timeZona = $timeZona;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
 
     /**
      *
@@ -141,5 +174,14 @@ class FunnyOrder extends AbstractModel implements FunnyOrderInterface
     public function setCustomerId($id)
     {
         $this->setData(FunnyOrderInterface::FIELD_CUSTOMER_ID, $id);
+    }
+
+    /**
+     * format data for save
+     */
+    public function formatterData()
+    {
+        $this->setFunEnd($this->timeZona->date($this->getFunEnd())->format('Y/m/d H:i:s'));
+        $this->setFunStart($this->timeZona->date($this->getFunStart())->format('Y/m/d H:i:s'));
     }
 }

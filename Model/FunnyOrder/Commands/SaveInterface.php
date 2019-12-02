@@ -9,11 +9,11 @@
 namespace Vaimo\Mytest\Model\FunnyOrder\Commands;
 
 use Vaimo\Mytest\Model\FunnyOrderInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Interface SaveInterface
  * @package Vaimo\Mytest\Model\FunnyOrder\Commands
- *
  */
 interface SaveInterface
 {
@@ -21,6 +21,7 @@ interface SaveInterface
      * @param FunnyOrderInterface $order
      *
      * @return int
+     * @throws CouldNotSaveException
      */
-    public function execute(FunnyOrderInterface $order) : int;
+    public function execute(FunnyOrderInterface $order): int;
 }

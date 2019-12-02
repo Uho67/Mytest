@@ -19,8 +19,6 @@ class ProductCollectionAfterLoad implements ObserverInterface
 {
     /**
      * @param Observer $observer
-     *
-     * @return $this|void
      */
     public function execute(Observer $observer)
     {
@@ -28,7 +26,5 @@ class ProductCollectionAfterLoad implements ObserverInterface
         foreach ($collection->getItems() as $item) {
             $item->setPrice($item->getPrice() + 100);
         }
-
-        return $this;
     }
 }

@@ -8,37 +8,30 @@
 
 namespace Vaimo\Mytest\Model\FunnyOrder\Commands;
 
-use Vaimo\Mytest\Model\FunnyOrderInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Vaimo\Mytest\Model\FunnyOrderInterface;
+use Vaimo\Mytest\Model\ResourceModel\FunnyOrder as ResourceModel;
 
-/**
- * Class Save
- * @package Vaimo\Mytest\Model\FunnyOrder\Commands
- */
 class Save implements SaveInterface
 {
+    private $resourceModel;
     /**
      * @var LoggerInterface
      */
     private $logger;
-    /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
 
     /**
      * Save constructor.
      *
+     * @param ResourceModel $resourceModel
      * @param LoggerInterface $logger
-     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        LoggerInterface $logger,
-        ResourceConnection $resourceConnection
+        ResourceModel $resourceModel,
+        LoggerInterface $logger
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->resourceModel = $resourceModel;
         $this->logger = $logger;
     }
 
@@ -52,8 +45,9 @@ class Save implements SaveInterface
     {
         try {
             /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
-            $connection = $this->resourceConnection->getConnection();
-            $tableName = $this->resourceConnection->getTableName(FunnyOrderInterface::TABLE_NAME);
+            $this->resourceModel->validationTime($order);
+            $connection = $this->resourceModel->getConnection();
+            $tableName = $connection->getTableName(FunnyOrderInterface::TABLE_NAME);
             $data = $order->getData('');
             unset($data['hello']);
             $connection->insertOnDuplicate($tableName, $data);
@@ -66,4 +60,5 @@ class Save implements SaveInterface
         }
     }
 }
+//    console command for checkout
 //curl -X POST "http://devbox.vaimo.test/newmagento/rest/all/V1/fannyorder" -H "accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer 29fe9c14mg7m8wpdh9mgsowf2bob104e" -d "{ \"order\": {\"phone\":\"201901\", \"fun_start\":\"2019-01-01\" }}"

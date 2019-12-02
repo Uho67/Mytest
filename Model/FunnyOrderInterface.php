@@ -144,4 +144,11 @@ interface FunnyOrderInterface
      * @return mixed
      */
     public function setCustomerId($id);
+
+    /**
+     * @return mixed
+     *
+     * change fun_start and fun_end to 'Y/m/d H:i:s' format
+     */
+    public function formatterData();
 }
