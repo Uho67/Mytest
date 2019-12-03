@@ -7,8 +7,14 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-    <route url="/V1/fannyorder" method="POST">
+    <route url="/V1/funnyorder" method="POST">
         <service class="Vaimo\Mytest\Model\FunnyOrder\Commands\SaveInterface" method="execute"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/funnyorder/getListCommand" method="POST">
+        <service class="Vaimo\Mytest\Model\FunnyOrder\Commands\GetListInterface" method="execute"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>

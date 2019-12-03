@@ -7,6 +7,8 @@
                 type="Vaimo\Mytest\Model\FunnyOrderRepository"/>
     <preference for="Vaimo\Mytest\Model\FunnyOrder\Commands\SaveInterface"
                 type="Vaimo\Mytest\Model\FunnyOrder\Commands\Save"/>
+    <preference for="Vaimo\Mytest\Model\FunnyOrder\Commands\GetListInterface"
+                type="Vaimo\Mytest\Model\FunnyOrder\Commands\GetList"/>
 
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>

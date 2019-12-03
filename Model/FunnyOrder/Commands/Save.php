@@ -61,4 +61,4 @@ class Save implements SaveInterface
     }
 }
 //    console command for checkout
-//curl -X POST "http://devbox.vaimo.test/newmagento/rest/all/V1/fannyorder" -H "accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer 29fe9c14mg7m8wpdh9mgsowf2bob104e" -d "{ \"order\": {\"phone\":\"201901\", \"fun_start\":\"2019-01-01\" }}"
+//curl -X POST "http://devbox.vaimo.test/newmagento/rest/all/V1/funnyorder" -H "accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer 29fe9c14mg7m8wpdh9mgsowf2bob104e" -d "{ \"order\": {\"phone\":\"201901\", \"fun_start\":\"2019-01-01\" }}"
