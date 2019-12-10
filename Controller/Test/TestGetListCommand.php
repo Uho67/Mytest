@@ -12,7 +12,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class TestGetListCommand
@@ -24,14 +24,21 @@ class TestGetListCommand extends Action
      * @var Curl
      */
     private $curl;
-    private $jsonHelper;
+    private $json;
 
+    /**
+     * TestGetListCommand constructor.
+     *
+     * @param Json $json
+     * @param Curl $curl
+     * @param Context $context
+     */
     public function __construct(
-        Data $jsonHelper,
+        Json $json,
         Curl $curl,
         Context $context
     ) {
-        $this->jsonHelper = $jsonHelper;
+        $this->json = $json;
         $this->curl = $curl;
         parent::__construct($context);
     }
@@ -42,7 +49,7 @@ class TestGetListCommand extends Action
     public function execute()
     {
         $url = "http://devbox.vaimo.test/newmagento/rest/V1/funnyorder/getListCommand?XDEBUG_SESSION_START=netbeans-xdebug";
-        $param = $this->jsonHelper->jsonEncode(['rules'=>['wish'=>' LIKE ,mmm','funny_id'=>'=,175']]);
+        $param = $this->json->serialize(['rules'=>['wish'=>' LIKE ,mmm','funny_id'=>'=,175']]);
 
         $this->curl->setHeaders([
             'Cache-Control' => 'no-cache',

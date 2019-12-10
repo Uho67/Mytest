@@ -23,3 +23,4 @@ interface GetListInterface
      */
     public function execute(array $rules);
 }
+//testcontroller for this interface Controller\Test\TestGetListCommand

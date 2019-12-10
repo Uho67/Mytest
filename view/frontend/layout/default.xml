@@ -14,7 +14,8 @@
             <referenceBlock name="header" remove="true"/>
         </referenceContainer>
         <referenceBlock name="header.links">
-            <block class="Magento\Framework\View\Element\Template" name="popup.event.button" template="Vaimo_Mytest::uiform/button.phtml" before="-"/>
+            <block class="Magento\Framework\View\Element\Template" name="popup.event.button" template="Vaimo_Mytest::uiform/button.phtml"  before="-"/>
         </referenceBlock>
+        <referenceContainer name="vaimo.mytest.popup" display="false"/>
     </body>
 </page>

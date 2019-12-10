@@ -16,6 +16,10 @@ use Vaimo\Mytest\Model\FunnyOrderInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Customer\Model\SessionFactory;
 
+/**
+ * Class Index
+ * @package Vaimo\Mytest\Controller\SaveFunnyOrder
+ */
 class Index extends Action
 {
     /**

@@ -12,10 +12,25 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Framework\Session\SessionManagerInterface;
 use Vaimo\Mytest\Model\ResourceModel\FunnyOrder\CollectionFactory;
 
+/**
+ * Class CustomerFormDataProvider
+ * @package Vaimo\Mytest\DataProvider
+ */
 class CustomerFormDataProvider extends AbstractDataProvider
 {
     private $sessionManager;
 
+    /**
+     * CustomerFormDataProvider constructor.
+     *
+     * @param SessionManagerInterface $sessionManager
+     * @param CollectionFactory $collectionFactory
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param array $meta
+     * @param array $data
+     */
     public function __construct(
         SessionManagerInterface $sessionManager,
         CollectionFactory $collectionFactory,
@@ -30,6 +45,9 @@ class CustomerFormDataProvider extends AbstractDataProvider
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         $customer = $this->sessionManager->getCurrentCustomerForFormMessage();
