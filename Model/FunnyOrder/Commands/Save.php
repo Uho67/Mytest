@@ -11,11 +11,14 @@ namespace Vaimo\Mytest\Model\FunnyOrder\Commands;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Vaimo\Mytest\Model\FunnyOrderInterface;
-use Vaimo\Mytest\Model\ResourceModel\FunnyOrder as ResourceModel;
+use Vaimo\Mytest\Model\ResourceModel\FunnyOrderFactory;
 
 class Save implements SaveInterface
 {
-    private $resourceModel;
+    /**
+     * @var
+     */
+    private $resourceModelFactory;
     /**
      * @var LoggerInterface
      */
@@ -24,14 +27,14 @@ class Save implements SaveInterface
     /**
      * Save constructor.
      *
-     * @param ResourceModel $resourceModel
+     * @param FunnyOrderFactory $resourceModelFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceModel $resourceModel,
+        FunnyOrderFactory $resourceModelFactory,
         LoggerInterface $logger
     ) {
-        $this->resourceModel = $resourceModel;
+        $this->resourceModelFactory = $resourceModelFactory;
         $this->logger = $logger;
     }
 
@@ -44,9 +47,10 @@ class Save implements SaveInterface
     public function execute(FunnyOrderInterface $order): int
     {
         try {
+            $resourceModel = $this->resourceModelFactory->create();
+            $resourceModel->validationTime($order);
             /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
-            $this->resourceModel->validationTime($order);
-            $connection = $this->resourceModel->getConnection();
+            $connection = $resourceModel->getConnection();
             $tableName = $connection->getTableName(FunnyOrderInterface::TABLE_NAME);
             $data = $order->getData('');
             unset($data['hello']);

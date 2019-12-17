@@ -7,9 +7,9 @@ define(['jquery', 'Magento_Ui/js/modal/modal'], function ($, modal) {
             title: 'Event order',
             buttons: []
         };
-        modal(options, $('#eventPopup'));
+        modal(options, $('#vaimo_mytest_event_popup'));
         node.onclick = function () {
-            $('#eventPopup').modal('openModal');
+            $('#vaimo_mytest_event_popup').modal('openModal');
         };
     }
 })

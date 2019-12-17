@@ -10,9 +10,9 @@ namespace Vaimo\Mytest\Controller\Test;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\HTTP\Client\Curl;
+use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\Serializer\JsonFactory;
 
 /**
  * Class TestGetListCommand
@@ -21,25 +21,28 @@ use Magento\Framework\Serialize\Serializer\Json;
 class TestGetListCommand extends Action
 {
     /**
-     * @var Curl
+     * @var CurlFactory
      */
-    private $curl;
-    private $json;
+    private $curlFactory;
+    /**
+     * @var JsonFactory
+     */
+    private $jsonFactory;
 
     /**
      * TestGetListCommand constructor.
      *
-     * @param Json $json
-     * @param Curl $curl
+     * @param JsonFactory $jsonFactory
+     * @param CurlFactory $curlFactory
      * @param Context $context
      */
     public function __construct(
-        Json $json,
-        Curl $curl,
+        JsonFactory $jsonFactory,
+        CurlFactory $curlFactory,
         Context $context
     ) {
-        $this->json = $json;
-        $this->curl = $curl;
+        $this->jsonFactory = $jsonFactory;
+        $this->curlFactory = $curlFactory;
         parent::__construct($context);
     }
 
@@ -49,16 +52,16 @@ class TestGetListCommand extends Action
     public function execute()
     {
         $url = "http://devbox.vaimo.test/newmagento/rest/V1/funnyorder/getListCommand?XDEBUG_SESSION_START=netbeans-xdebug";
-        $param = $this->json->serialize(['rules'=>['wish'=>' LIKE ,mmm','funny_id'=>'=,175']]);
-
-        $this->curl->setHeaders([
+        $param = $this->jsonFactory->create()->serialize(['rules'=>['wish'=>' LIKE ,mmm','funny_id'=>'=,175']]);
+        $curl = $this->curlFactory->create();
+        $curl->setHeaders([
             'Cache-Control' => 'no-cache',
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
         ]);
 
-        $this->curl->post($url,$param);
-        $request = $this->curl->getBody();
+        $curl->post($url,$param);
+        $request = $curl->getBody();
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setUrl($this->_redirect->getRefererUrl());
         return $resultRedirect;

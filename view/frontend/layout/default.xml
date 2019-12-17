@@ -6,8 +6,11 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Vaimo_Mytest::css/vaimo_test.css" />
+    </head>
     <body>
-        <container name="vaimo.mytest.popup" htmlTag="div" htmlId="eventPopup" before="-">
+        <container name="vaimo.mytest.popup" htmlTag="div" htmlId="vaimo_mytest_event_popup" before="-">
             <uiComponent name="funnyorderfront_form"/>
         </container>
         <referenceContainer name="header.panel">
@@ -16,6 +19,5 @@
         <referenceBlock name="header.links">
             <block class="Magento\Framework\View\Element\Template" name="popup.event.button" template="Vaimo_Mytest::uiform/button.phtml"  before="-"/>
         </referenceBlock>
-        <referenceContainer name="vaimo.mytest.popup" display="false"/>
     </body>
 </page>
